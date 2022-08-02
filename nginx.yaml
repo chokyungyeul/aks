@@ -1,21 +1,19 @@
-apiVersion: v1
-kind: Service
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  labels:
-    app.kubernetes.io/component: server
-    app.kubernetes.io/name: argocd-server
-    app.kubernetes.io/part-of: argocd
-  name: argocd-server
+  name: mynginx
 spec:
-  type: NodePort
-  ports:
-  - name: http
-    port: 80
-    protocol: TCP
-    targetPort: 8080
-  - name: https
-    port: 443
-    protocol: TCP
-    targetPort: 8080
+  replicas: 1
   selector:
-    app.kubernetes.io/name: argocd-server
+    matchLabels:
+      run: mynginx
+  template:
+    metadata:
+      labels:
+        run: mynginx
+    spec:
+      containers:
+      - image: nginx
+        name: mynginx
+        ports:
+        - containerPort: 80
