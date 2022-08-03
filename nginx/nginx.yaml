@@ -1,19 +1,25 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: mynginx
+apiVersion: v1 # String
+kind: Pod # String
+metadata: # Dictionary
+  name: nginx2
+  labels: # Dictionary
+    app: nginx2  # Key value paids
 spec:
-  replicas: 3    # <-- 기존 1에서 2로 수정
+  containers: # List
+    - name: nginx
+      image: nginx
+      ports: 
+      - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx2
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
   selector:
-    matchLabels:
-      run: mynginx
-  template:
-    metadata:
-      labels:
-        run: mynginx
-    spec:
-      containers:
-      - image: nginx
-        name: mynginx
-        ports:
-        - containerPort: 80
+    app: nginx
